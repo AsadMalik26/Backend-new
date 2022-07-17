@@ -73,21 +73,5 @@ router.delete("/:id", async (req, res) => {
   console.log("Deleted", entry);
   res.send(entry);
 });
-router.get("/cart/:id", async (req, res) => {
-  try {
-    var entry = await cashModel.findById(req.params.id);
-    var cart = [];
-    if (req.cookies.cart) cart = req.cookies.cart;
-    cart.push(entry);
-    res.cookie("cart", cart);
-    // 1st is variable name, 2nd is cart which contains data of variable
-
-    console.log("Product added in cart");
-  } catch {
-    entry = "Product can't be added in cart";
-  }
-  console.log(entry);
-  res.send(entry);
-});
 
 module.exports = router;
