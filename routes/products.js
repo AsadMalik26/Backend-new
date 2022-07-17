@@ -1,5 +1,6 @@
 const express = require("express");
 const router = express.Router();
+const cashModel = require("../databaseModels/dbmodels");
 
 // app.use(cors());
 const {
@@ -9,7 +10,6 @@ const {
   deleteEntry,
   updateEntry,
 } = require("../databaseOperations/modelOperations");
-const cashModel = require("../databaseModels/dbmodels");
 
 //read or fetch requests
 router.get("/", async (req, res) => {
