@@ -12,7 +12,28 @@ const userSchema = mongoose.Schema({
   email: String,
   password: String,
 });
+//sign up validation
+function validateUserSignup(data) {
+  console.log("Validating User Login");
+  const schema = Joi.object({
+    name: Joi.string().min(3).max(25).required(),
+    email: Joi.string().email().min(3).required(),
+    password: Joi.string().min(6).max(12).required(),
+  });
+  return schema.validate(data, { abortEarly: false });
+}
+//login validation
+function validateUserLogin(data) {
+  console.log("Validating User Login");
+  const schema = Joi.object({
+    email: Joi.string().email().min(3).required(),
+    password: Joi.string().min(6).max(12).required(),
+  });
+  return schema.validate(data, { abortEarly: false });
+}
 
 const userModel = mongoose.model("user", userSchema);
 
-module.exports = userModel;
+module.exports.userModel = userModel;
+module.exports.validateUserSignup = validateUserSignup;
+module.exports.validateUserLogin = validateUserLogin;

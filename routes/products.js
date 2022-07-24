@@ -14,7 +14,7 @@ const {
 //read or fetch requests
 router.get("/", async (req, res) => {
   console.log("Get All");
-  console.log("Query: ", req.query);
+  // console.log("Query: ", req.query);
   let page = Number(req.query.page ? req.query.page : 1);
   let perPage = Number(req.query.perPage ? req.query.perPage : 10);
   let skipRecords = perPage * (page - 1);
