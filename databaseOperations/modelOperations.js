@@ -10,8 +10,8 @@ const createEntry = async (title, price, description) => {
   return entry;
 };
 
-const getAllEntries = async () => {
-  let entries = await cashModel.find();
+const getAllEntries = async (skipRecords, perPage) => {
+  let entries = await cashModel.find().skip(skipRecords).limit(perPage);
   return entries;
 };
 
