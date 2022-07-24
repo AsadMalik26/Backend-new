@@ -46,7 +46,7 @@ router.post("/", validate, async (req, res) => {
 });
 
 //Put - update request
-router.put("/:id", async (req, res) => {
+router.put("/:id", validate, async (req, res) => {
   var obj = req.body;
   console.log("Updating", obj);
   try {

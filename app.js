@@ -16,6 +16,7 @@ var usersRouter = require("./routes/users");
 var productsRouter = require("./routes/products");
 var cartRouter = require("./routes/cart");
 const cors = require("cors");
+const config = require("config");
 
 var app = express();
 app.use(cors());
@@ -68,17 +69,17 @@ app.use(function (err, req, res, next) {
 /* const MongoURI =
   "mongodb+srv://Asadm26:OpenCode.mdbA26@clustera26.zhmri.mongodb.net/JQAPI?retryWrites=true&w=majority";
  */
-const MongoURI = "mongodb://localhost/OfflineProductsDB";
+// const MongoURI = "mongodb://localhost/OfflineProductsDB";
 mongoose
-  .connect(MongoURI, {
+  .connect(config.get("db"), {
     useNewUrlParser: true,
     useUnifiedTopology: true,
   })
-  .then(() => console.log("Connected with mongodb - New BAckend"))
+  .then(() => console.log("Connected with mongodb - New Backend"))
   .catch((err) => console.log(err.message));
 
 const sessionStore = MongoDBSession({
-  uri: MongoURI,
+  uri: config.get("db"),
   collectionName: "sessions",
 });
 
