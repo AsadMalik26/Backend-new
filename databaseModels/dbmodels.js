@@ -1,5 +1,5 @@
 const mongoose = require("mongoose");
-
+const Joi = require("joi");
 /* const spentAtSchema = mongoose.Schema({
   title: String, //cash spent for
   price: float,
@@ -16,6 +16,17 @@ const cashSchema = mongoose.Schema({
   },
 });
 
+function validateProduct(data) {
+  console.log("Validating");
+  const schema = Joi.object({
+    title: Joi.string().min(3).max(25).required(),
+    price: Joi.number().min(0).required(),
+    description: Joi.string(),
+  });
+  return schema.validate(data, { abortEarly: false });
+}
+
 const cashModel = mongoose.model("cashModel", cashSchema);
 
-module.exports = cashModel;
+module.exports.cashModel = cashModel;
+module.exports.validateProduct = validateProduct;

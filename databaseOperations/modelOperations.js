@@ -1,4 +1,4 @@
-const cashModel = require("../databaseModels/dbmodels");
+const { cashModel } = require("../databaseModels/dbmodels");
 
 const createEntry = async (title, price, description) => {
   let entry = new cashModel();

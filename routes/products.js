@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
-const cashModel = require("../databaseModels/dbmodels");
-
+const { cashModel, validateProduct } = require("../databaseModels/dbmodels");
+const validate = require("../middlewares/validateProduct");
 // app.use(cors());
 const {
   createEntry,
@@ -38,12 +38,9 @@ router.get("/:id", async (req, res) => {
 });
 
 //Post - create request
-router.post("/", async (req, res) => {
-  //1st is starting index, 2nd is no. of records to be deleted. here the only one itself
-  /* food.push(req.body.name);
-  res.send(food); */
+router.post("/", validate, async (req, res) => {
   var obj = req.body;
-  console.log("Posting: ", obj);
+  // console.log("Posting: ", obj);
   var entry = await createEntry(obj.title, obj.price, obj.description);
   res.send(entry);
 });

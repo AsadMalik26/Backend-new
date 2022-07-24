@@ -5,7 +5,11 @@ var cookieParser = require("cookie-parser");
 var logger = require("morgan");
 const mongoose = require("mongoose");
 var sessions = require("express-session");
+
+// auth middelwares
 // var sessionAuth = require("./middlewares/sessionAuth");
+// var checkSessionAuth = require("./middlewares/checkSessionAuth");
+
 const MongoDBSession = require("connect-mongodb-session")(sessions);
 var indexRouter = require("./routes/index");
 var usersRouter = require("./routes/users");
@@ -15,6 +19,8 @@ const cors = require("cors");
 
 var app = express();
 app.use(cors());
+
+// app.use(sessionAuth);
 //session middleware
 // creating 24 hours from milliseconds
 const oneDay = 1000 * 60 * 60 * 24;
