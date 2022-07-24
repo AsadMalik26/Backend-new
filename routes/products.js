@@ -14,7 +14,7 @@ const {
 //read or fetch requests
 router.get("/", async (req, res) => {
   console.log("Get All");
-  // console.log(req.session.user);
+
   try {
     var e = await getAllEntries();
   } catch {

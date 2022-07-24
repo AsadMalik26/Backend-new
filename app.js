@@ -4,9 +4,9 @@ var path = require("path");
 var cookieParser = require("cookie-parser");
 var logger = require("morgan");
 const mongoose = require("mongoose");
-var session = require("express-session");
+var sessions = require("express-session");
 // var sessionAuth = require("./middlewares/sessionAuth");
-const MongoDBSession = require("connect-mongodb-session")(session);
+const MongoDBSession = require("connect-mongodb-session")(sessions);
 var indexRouter = require("./routes/index");
 var usersRouter = require("./routes/users");
 var productsRouter = require("./routes/products");
@@ -15,6 +15,18 @@ const cors = require("cors");
 
 var app = express();
 app.use(cors());
+//session middleware
+// creating 24 hours from milliseconds
+const oneDay = 1000 * 60 * 60 * 24;
+
+app.use(
+  sessions({
+    secret: "thisismysecrctekeyfhrgfgrfrty84fwir767",
+    saveUninitialized: true,
+    cookie: { maxAge: oneDay },
+    resave: false,
+  })
+);
 // app.use(sessionAuth);
 // view engine setup
 app.set("views", path.join(__dirname, "views"));
@@ -64,7 +76,7 @@ const sessionStore = MongoDBSession({
   collectionName: "sessions",
 });
 
-app.use(
+/* app.use(
   session({
     secret: "keyboard cat",
     // resave: false,
@@ -72,5 +84,5 @@ app.use(
     session: sessionStore,
     cookie: { maxAge: 60000 },
   })
-);
+); */
 module.exports = app;

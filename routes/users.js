@@ -1,11 +1,23 @@
 var express = require("express");
 var router = express.Router();
 var User = require("../databaseModels/usersModel");
+
+// a variable to save a session
+var session = {};
+
 /* GET users listing. */
 router.get("/", function (req, res, next) {
   console.log("Users");
   console.log("Request: ", req.body);
-  res.send("respond with a resource");
+
+  session = req.session;
+  if (session) {
+    console.log("Session userid: ", session.userid);
+    console.log("Session id: ", session.id);
+    console.log("Session Cookie: ", session.cookie);
+    console.log("Session: ", session);
+  } else console.log("Session Not found: ", session);
+  res.send(session);
 });
 //register
 router.post("/register", async function (req, res, next) {
@@ -30,7 +42,17 @@ router.post("/login", async function (req, res, next) {
     });
     if (user) {
       status = "User Found";
-      console.log("USer: ", user);
+      // console.log("USer: ", user);
+
+      session = req.session;
+      session.userid = req.body.email;
+      console.log(req.session);
+      console.log("Session: ", session);
+      console.log("Session user id: ", session.userid);
+      console.log("Session id: ", session.id);
+
+      req.cookies = session.userid;
+      res.cookies = session.userid;
     } else status = "Not a User";
   } catch (e) {
     var status = "Error Finding User" + e;
