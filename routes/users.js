@@ -3,6 +3,8 @@ var router = express.Router();
 var User = require("../databaseModels/usersModel");
 /* GET users listing. */
 router.get("/", function (req, res, next) {
+  console.log("Users");
+  console.log("Request: ", req.body);
   res.send("respond with a resource");
 });
 //register
@@ -15,6 +17,7 @@ router.post("/register", async function (req, res, next) {
   } catch {
     var status = "Error Registering User";
   }
+  console.log(status);
   res.send(status);
 });
 router.post("/login", async function (req, res, next) {
@@ -25,11 +28,14 @@ router.post("/login", async function (req, res, next) {
       email: req.body.email,
       password: req.body.password,
     });
-    if (user) status = "User Found";
-    else status = "Not a User";
-  } catch {
-    var status = "Error Finding User";
+    if (user) {
+      status = "User Found";
+      console.log("USer: ", user);
+    } else status = "Not a User";
+  } catch (e) {
+    var status = "Error Finding User" + e;
   }
+  console.log(status);
   res.send(status);
 });
 
