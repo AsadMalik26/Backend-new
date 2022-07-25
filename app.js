@@ -5,6 +5,7 @@ var cookieParser = require("cookie-parser");
 var logger = require("morgan");
 const mongoose = require("mongoose");
 var sessions = require("express-session");
+const _ = require("lodash");
 
 // auth middelwares
 // var sessionAuth = require("./middlewares/sessionAuth");
