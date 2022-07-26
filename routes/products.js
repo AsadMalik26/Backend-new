@@ -2,6 +2,8 @@ const express = require("express");
 const router = express.Router();
 const { cashModel, validateProduct } = require("../databaseModels/dbmodels");
 const validate = require("../middlewares/validateProduct");
+const auth = require("../middlewares/auth");
+const admin = require("../middlewares/isAdmin");
 // app.use(cors());
 const {
   createEntry,
@@ -12,8 +14,9 @@ const {
 } = require("../databaseOperations/modelOperations");
 
 //read or fetch requests
-router.get("/", async (req, res) => {
+router.get("/", auth, admin, async (req, res) => {
   console.log("Get All");
+  console.log(req.user);
   // console.log("Query: ", req.query);
   let page = Number(req.query.page ? req.query.page : 1);
   let perPage = Number(req.query.perPage ? req.query.perPage : 10);

@@ -2,9 +2,10 @@ var express = require("express");
 var router = express.Router();
 var { userModel } = require("../databaseModels/usersModel");
 const isAlreadyUser = require("../middlewares/isAlreadyUser");
-const bcrypt = require("bcryptjs");
 const _ = require("lodash");
 const isUser = require("../middlewares/isUser");
+const jwt = require("jsonwebtoken");
+const config = require("config");
 
 // a variable to save a session
 var session;
@@ -31,9 +32,7 @@ router.post("/register", isAlreadyUser, async function (req, res, next) {
     user.name = req.body.name;
     user.email = req.body.email;
     user.password = req.body.password;
-
-    let salt = await bcrypt.genSalt(10);
-    user.password = await bcrypt.hash(user.password, salt);
+    await user.generateHashedPassword();
     await user.save();
     status = "User Registered";
   } catch {
@@ -45,22 +44,20 @@ router.post("/register", isAlreadyUser, async function (req, res, next) {
 });
 router.post("/login", isUser, async function (req, res, next) {
   var status = "User Pending";
-  // try {
-  //   var user = await userModel.findOne({
-  //     // name: req.body.name,
-  //     email: req.body.email,
-  //     password: req.body.password,
-  //   });
-  //   if (user) {
+  console.log(
+    "From previous middleware (user): ",
+    _.pick(req.user, ["name", "email"])
+  );
   status = [true, "Found User"];
-  //     // console.log("USer: ", user);
 
+  let token = jwt.sign(
+    { _id: req.user._id, name: req.user.name },
+    config.get("jwtprivatekey")
+  );
+  console.log(token);
   session = req.session;
   session.userid = req.body.email;
   console.log(req.session);
-  console.log("Session: ", session);
-  console.log("Session user id: ", session.userid);
-  console.log("Session id: ", session.id);
 
   req.cookies = session.userid;
   //   } else status = [false, "Not a User"];

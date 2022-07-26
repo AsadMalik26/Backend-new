@@ -1,3 +1,4 @@
 {
-    "db": "mongodb://localhost/OfflineProductsDB"
+    "db": "mongodb://localhost/OfflineProductsDB",
+    "jwtprivatekey":"this is my secret key"
 }
