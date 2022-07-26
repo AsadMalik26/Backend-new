@@ -14,9 +14,10 @@ const {
 } = require("../databaseOperations/modelOperations");
 
 //read or fetch requests
-router.get("/", auth, admin, async (req, res) => {
+router.get("/", async (req, res) => {
   console.log("Get All");
-  console.log(req.user);
+  console.log("Cookies: ", req.cookies);
+  // console.log(req.session); it containes session but not user id
   // console.log("Query: ", req.query);
   let page = Number(req.query.page ? req.query.page : 1);
   let perPage = Number(req.query.perPage ? req.query.perPage : 10);
@@ -45,7 +46,7 @@ router.get("/:id", async (req, res) => {
 });
 
 //Post - create request
-router.post("/", validate, async (req, res) => {
+router.post("/", auth, validate, async (req, res) => {
   var obj = req.body;
   // console.log("Posting: ", obj);
   var entry = await createEntry(obj.title, obj.price, obj.description);
@@ -53,7 +54,7 @@ router.post("/", validate, async (req, res) => {
 });
 
 //Put - update request
-router.put("/:id", validate, async (req, res) => {
+router.put("/:id", auth, admin, validate, async (req, res) => {
   var obj = req.body;
   console.log("Updating", obj);
   try {
@@ -70,7 +71,7 @@ router.put("/:id", validate, async (req, res) => {
 });
 
 //delete request
-router.delete("/:id", async (req, res) => {
+router.delete("/:id", auth, admin, async (req, res) => {
   //1st is starting index, 2nd is no. of records to be deleted. here the only one itself
   /* food.splice(req.params.id, 1);
   res.send(food); */

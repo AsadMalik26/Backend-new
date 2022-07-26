@@ -6,6 +6,8 @@ const _ = require("lodash");
 const isUser = require("../middlewares/isUser");
 const jwt = require("jsonwebtoken");
 const config = require("config");
+const auth = require("../middlewares/auth");
+const admin = require("../middlewares/isAdmin");
 
 // a variable to save a session
 var session;
@@ -14,14 +16,15 @@ router.get("/", function (req, res, next) {
   console.log("Users");
   console.log("Request: ", req.body);
 
-  session = req.session;
-  if (session.id) {
+  /*  session = req.session;
+  if (session.userid) {
     console.log("Session userid: ", session.userid);
     console.log("Session id: ", session.id);
     console.log("Session Cookie: ", session.cookie);
     console.log("Session: ", session);
-  } else console.log("Session Not found: ", session);
-  res.send(session);
+  } else console.log("Session Not found: ", session); */
+
+  res.cookie("Name", "This is the cookie", { maxAge: 60000 }).send(session);
 });
 //register
 router.post("/register", isAlreadyUser, async function (req, res, next) {
@@ -48,13 +51,18 @@ router.post("/login", isUser, async function (req, res, next) {
     "From previous middleware (user): ",
     _.pick(req.user, ["name", "email"])
   );
+
   status = [true, "Found User"];
 
   let token = jwt.sign(
     { _id: req.user._id, name: req.user.name },
     config.get("jwtprivatekey")
   );
-  console.log(token);
+  res.set("user-auth-token", token);
+  //login cookie
+  req.cookies.login = token;
+  console.log("Cookie Token: ", req.cookies.login);
+
   session = req.session;
   session.userid = req.body.email;
   console.log(req.session);
@@ -64,7 +72,9 @@ router.post("/login", isUser, async function (req, res, next) {
   // } catch (e) {
   //   var status = "Error Finding User" + e;
   // }
-  console.log(status);
+  console.log("Status: ", status);
+  console.log("Req.cookies: ", req.cookies);
+  res.cookie("name", "express");
   res.send(status);
 });
 
